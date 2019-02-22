@@ -10,6 +10,26 @@ char **reconstruct_trip(Ticket **tickets, int length)
   char **route = malloc(length * sizeof(char *));
 
   // YOUR CODE HERE
+  
+  // Loop through and add everything to the hash table
+  for (int index = 0; index < length; index++) {
+    Ticket *ticket = tickets[index];
+    
+    hash_table_insert(ht, ticket->source, ticket->destination);
+  }
+  
+  // Initial last destination
+  char *lastDestination = "NONE";
+  
+  // Loop through and get the last destination at each index and add it to route array
+  for (int index = 0; index < length; index++) {
+    // Pass the last destination as the source in the hash table
+    lastDestination = hash_table_retrieve(ht, lastDestination);
+    // Add the latest destination to the route array at the current index
+    route[index] = lastDestination;
+  }
+  
+  destroy_hash_table(ht);
 
   return route;
 }
